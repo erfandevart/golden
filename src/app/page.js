@@ -335,7 +335,7 @@ export default function Page() {
       </main>
 
       <footer className="p-4 text-center text-xs text-gray-500">
-        erfandevart توسعه داده شده توسط
+      توسعه داده شده توسط  erfandevart 
       </footer>
 
     
