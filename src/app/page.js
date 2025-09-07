@@ -160,12 +160,11 @@
 //       </main>
 
 //       <footer className="p-4 text-center text-xs text-slate-500">
-//         erfandevart توسعه داده شده توسط 
+//         erfandevart توسعه داده شده توسط
 //       </footer>
 //     </div>
 //   );
 // }
-
 
 "use client";
 
@@ -177,6 +176,7 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  CartesianGrid,
 } from "recharts";
 
 export default function Page() {
@@ -335,51 +335,60 @@ export default function Page() {
       </main>
 
       <footer className="p-4 text-center text-xs text-gray-500">
-      توسعه داده شده توسط  erfandevart 
+        توسعه داده شده توسط erfandevart
       </footer>
 
-    
-  {/* مدال نمودار */}
-{selectedItem && (
-  <div
-    className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-    onClick={() => setSelectedItem(null)}
-  >
-    <div
-      className="bg-white/70 backdrop-blur-xl rounded-3xl p-4 max-w-sm w-full relative"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <button
-        className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 font-bold"
-        onClick={() => setSelectedItem(null)}
-      >
-        ✕
-      </button>
+      {selectedItem && (
+        <div
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedItem(null)}
+        >
+          <div
+            className="bg-white/70 backdrop-blur-xl rounded-3xl p-5 max-w-xs w-full flex flex-col items-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-lg font-semibold mb-4 text-center">
+              {PRODUCT_MAP.find((p) => p.id === selectedItem)?.label}
+            </h2>
 
-      <h2 className="text-lg font-semibold mb-3">
-        {PRODUCT_MAP.find((p) => p.id === selectedItem)?.label}
-      </h2>
-
-      <div className="h-48">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={historyRef.current[selectedItem] ?? []}>
-            <XAxis dataKey="t" />
-            <YAxis />
-            <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="v"
-              stroke="#6366f1"
-              dot={{ r: 3 }}
-              strokeWidth={2}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  </div>
-)}
-
+            <div className="h-48 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={(historyRef.current[selectedItem] ?? [])
+                    .slice()
+                    .sort((a, b) => new Date(a.t) - new Date(b.t))}
+                  margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
+                >
+                  <CartesianGrid stroke="#e0e0e0" strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="t"
+                    tick={{ fontSize: 10, fill: "#4b5563" }}
+                    padding={{ left: 10, right: 10 }}
+                  />
+                  <YAxis tick={{ fontSize: 10, fill: "#4b5563" }} width={40} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#ffffffcc",
+                      border: "1px solid #ccc",
+                      borderRadius: "8px",
+                      padding: "6px",
+                    }}
+                    labelStyle={{ color: "#111827", fontSize: 12 }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="v"
+                    stroke="#6366f1"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                    activeDot={{ r: 5 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
