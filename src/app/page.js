@@ -170,7 +170,14 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 export default function Page() {
   const [query, setQuery] = useState("");
@@ -178,6 +185,7 @@ export default function Page() {
   const [karatFilter, setKaratFilter] = useState("all");
   const [currency, setCurrency] = useState("IRR");
   const [items, setItems] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null); // برای مدال
   const historyRef = useRef({});
   const POLL = 30000;
 
@@ -186,12 +194,13 @@ export default function Page() {
     { id: "gold_24", label: "طلای 24 عیار", kind: "abshode", karat: 24 },
     { id: "sekke", label: "سکه تمام بهار", kind: "sekke", karat: 24 },
     { id: "sekke_emami", label: "سکه امامی", kind: "sekke", karat: 24 },
-    { id: "usd", label: "دلار", kind: "currency", karat: null }
+    { id: "usd", label: "دلار", kind: "currency", karat: null },
   ];
 
-  const visibleList = PRODUCT_MAP.filter(p => {
+  const visibleList = PRODUCT_MAP.filter((p) => {
     if (typeFilter !== "all" && p.kind !== typeFilter) return false;
-    if (karatFilter !== "all" && String(p.karat) !== String(karatFilter)) return false;
+    if (karatFilter !== "all" && String(p.karat) !== String(karatFilter))
+      return false;
     if (query && !p.label.includes(query)) return false;
     return true;
   });
@@ -201,7 +210,7 @@ export default function Page() {
       const res = await fetch("/api/prices");
       const json = await res.json();
 
-      const newItems = PRODUCT_MAP.map(p => {
+      const newItems = PRODUCT_MAP.map((p) => {
         let price = null;
         if (p.id === "gold_18") price = json?.gold_18?.p;
         if (p.id === "gold_24") price = json?.gold_24?.p;
@@ -212,13 +221,14 @@ export default function Page() {
       });
 
       setItems(newItems);
-
-      newItems.forEach(it => {
+      newItems.forEach((it) => {
         if (!historyRef.current[it.id]) historyRef.current[it.id] = [];
-        const prev = historyRef.current[it.id].length ? historyRef.current[it.id][historyRef.current[it.id].length - 1].v : null;
-        const diff = prev !== null ? it.price - prev : 0;
-        historyRef.current[it.id].push({ t: new Date().toLocaleTimeString(), v: it.price ?? 0, prev, diff });
-        if (historyRef.current[it.id].length > 20) historyRef.current[it.id].shift();
+        historyRef.current[it.id].push({
+          t: new Date().toLocaleTimeString(),
+          v: it.price ?? 0,
+        });
+        if (historyRef.current[it.id].length > 50)
+          historyRef.current[it.id].shift();
       });
     } catch (err) {
       console.error("Local API fetch error", err);
@@ -232,21 +242,34 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 md:hidden">
-      <header className="p-4 bg-white shadow-sm sticky top-0 z-20">
+    <div className="min-h-screen bg-slate-100 md:hidden font-sans">
+      <header className="p-4 bg-white/80 backdrop-blur-sm shadow sticky top-0 z-20">
         <h1 className="text-lg font-semibold">قیمت‌های لحظه‌ای طلا و ارز</h1>
-        <p className="text-sm text-slate-500">آپدیت هر ۳۰ ثانیه — موبایل فقط</p>
+        <p className="text-sm text-slate-500">آپدیت هر ۳۰ ثانیه</p>
       </header>
 
       <main className="p-4 space-y-4">
-        <div className="flex gap-2">
-          <input value={query} onChange={e => setQuery(e.target.value)} placeholder="جستجو..." className="flex-1 p-2 rounded-lg border" />
-          <select value={karatFilter} onChange={e => setKaratFilter(e.target.value)} className="p-2 rounded-lg border">
+        <div className="flex gap-1 mb-4">
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="جستجو..."
+            className="flex-1 p-2 rounded-xl border border-gray-300 shadow-sm focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+          />
+          <select
+            value={karatFilter}
+            onChange={(e) => setKaratFilter(e.target.value)}
+            className="p-2 rounded-xl border border-gray-300 shadow-sm"
+          >
             <option value="all">همه عیارها</option>
             <option value="18">18 عیار</option>
             <option value="24">24 عیار</option>
           </select>
-          <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)} className="p-2 rounded-lg border">
+          <select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            className="p-2 rounded-xl border border-gray-300 shadow-sm"
+          >
             <option value="all">همه</option>
             <option value="abshode">آب شده</option>
             <option value="sekke">سکه</option>
@@ -255,20 +278,31 @@ export default function Page() {
         </div>
 
         <div className="space-y-3">
-          {visibleList.map(p => {
+          {visibleList.map((p) => {
             const data = historyRef.current[p.id] ?? [];
-            const price = items.find(it => it.id === p.id)?.price ?? "—";
+            const price = items.find((it) => it.id === p.id)?.price ?? "—";
 
             return (
-              <div key={p.id} className="bg-white p-3 rounded-lg shadow-sm">
+              <div
+                key={p.id}
+                className="bg-white/60 backdrop-blur-md p-4 rounded-2xl shadow-lg cursor-pointer hover:scale-[1.02] transition-transform"
+                onClick={() => setSelectedItem(p.id)}
+              >
                 <div className="flex justify-between items-center">
                   <div>
-                    <div className="font-medium">{p.label}</div>
-                    <div className="text-xs text-slate-500">آخرین بروزرسانی: {data.length ? data[data.length - 1].t : "—"}</div>
+                    <div className="font-medium text-gray-800">{p.label}</div>
+                    <div className="text-xs text-gray-500">
+                      آخرین بروزرسانی:{" "}
+                      {data.length ? data[data.length - 1].t : "—"}
+                    </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-lg font-semibold">{price === null ? "—" : new Intl.NumberFormat("fa-IR").format(price)}</div>
-                    <div className="text-xs text-slate-400">{currency}</div>
+                    <div className="text-lg font-semibold text-gray-900">
+                      {price === null
+                        ? "—"
+                        : new Intl.NumberFormat("fa-IR").format(price)}
+                    </div>
+                    <div className="text-xs text-gray-400">{currency}</div>
                   </div>
                 </div>
 
@@ -277,16 +311,11 @@ export default function Page() {
                     <LineChart data={data}>
                       <XAxis dataKey="t" hide />
                       <YAxis hide />
-                      <Tooltip formatter={(value, name, props) => {
-                        const diff = props.payload.diff;
-                        const prev = props.payload.prev;
-                        const sign = diff > 0 ? '+' : diff < 0 ? '-' : diff === 0 ? '=' : '';
-                        return [`${new Intl.NumberFormat('fa-IR').format(value)} (Prev: ${prev ? new Intl.NumberFormat('fa-IR').format(prev) : '—'}, ${sign}${Math.abs(diff)})`, name];
-                      }} />
+                      <Tooltip />
                       <Line
                         type="monotone"
                         dataKey="v"
-                        stroke="#4f46e5"
+                        stroke="#6366f1"
                         dot={false}
                         strokeWidth={2}
                       />
@@ -297,11 +326,60 @@ export default function Page() {
             );
           })}
 
-          {visibleList.length === 0 && <div className="text-center text-slate-500 py-8">موردی مطابق فیلتر شما پیدا نشد.</div>}
+          {visibleList.length === 0 && (
+            <div className="text-center text-gray-500 py-8">
+              موردی مطابق فیلتر شما پیدا نشد.
+            </div>
+          )}
         </div>
       </main>
 
-      <footer className="p-4 text-center text-xs text-slate-500">اطلاعات از TGJU (نسخه غیررسمی) — آپدیت هر ۳۰ ثانیه</footer>
+      <footer className="p-4 text-center text-xs text-gray-500">
+        erfandevart توسعه داده شده توسط
+      </footer>
+
+    
+  {/* مدال نمودار */}
+{selectedItem && (
+  <div
+    className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+    onClick={() => setSelectedItem(null)}
+  >
+    <div
+      className="bg-white/70 backdrop-blur-xl rounded-3xl p-4 max-w-sm w-full relative"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <button
+        className="absolute top-2 right-2 text-gray-600 hover:text-gray-900 font-bold"
+        onClick={() => setSelectedItem(null)}
+      >
+        ✕
+      </button>
+
+      <h2 className="text-lg font-semibold mb-3">
+        {PRODUCT_MAP.find((p) => p.id === selectedItem)?.label}
+      </h2>
+
+      <div className="h-48">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={historyRef.current[selectedItem] ?? []}>
+            <XAxis dataKey="t" />
+            <YAxis />
+            <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="v"
+              stroke="#6366f1"
+              dot={{ r: 3 }}
+              strokeWidth={2}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }
