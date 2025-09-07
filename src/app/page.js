@@ -63,7 +63,7 @@ export default function Page() {
     <div className="min-h-screen bg-slate-50 md:hidden">
       <header className="p-4 bg-white shadow-sm sticky top-0 z-20">
         <h1 className="text-lg font-semibold">قیمت‌های لحظه‌ای طلا و ارز</h1>
-        <p className="text-sm text-slate-500">آپدیت هر ۳۰ ثانیه — موبایل فقط</p>
+        <p className="text-sm text-slate-500">آپدیت هر ۳۰ ثانیه</p>
       </header>
 
       <main className="p-4 space-y-4">
