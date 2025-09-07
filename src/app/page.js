@@ -1,103 +1,123 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useEffect, useState, useRef } from "react";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+
+export default function Page() {
+  const [query, setQuery] = useState("");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [karatFilter, setKaratFilter] = useState("all");
+  const [currency, setCurrency] = useState("IRR");
+  const [items, setItems] = useState([]);
+  const historyRef = useRef({});
+  const POLL = 30000;
+
+  const PRODUCT_MAP = [
+    { id: "gold_18", label: "طلای 18 عیار", kind: "abshode", karat: 18 },
+    { id: "gold_24", label: "طلای 24 عیار", kind: "abshode", karat: 24 },
+    { id: "sekke", label: "سکه تمام بهار", kind: "sekke", karat: 24 },
+    { id: "sekke_emami", label: "سکه امامی", kind: "sekke", karat: 24 },
+    { id: "usd", label: "دلار", kind: "currency", karat: null }
+  ];
+
+  const visibleList = PRODUCT_MAP.filter(p => {
+    if (typeFilter !== "all" && p.kind !== typeFilter) return false;
+    if (karatFilter !== "all" && String(p.karat) !== String(karatFilter)) return false;
+    if (query && !p.label.includes(query)) return false;
+    return true;
+  });
+
+  async function fetchPrices() {
+    try {
+      const res = await fetch("/api/prices"); // حالا از API داخلی می‌گیریم
+      const json = await res.json();
+
+      const newItems = PRODUCT_MAP.map(p => {
+        let price = null;
+        if (p.id === "gold_18") price = json?.gold_18?.p;
+        if (p.id === "gold_24") price = json?.gold_24?.p;
+        if (p.id === "sekke") price = json?.sekke?.p;
+        if (p.id === "sekke_emami") price = json?.sekke_emami?.p;
+        if (p.id === "usd") price = json?.price_dollar_rl?.p;
+        return { id: p.id, label: p.label, price };
+      });
+
+      setItems(newItems);
+      newItems.forEach(it => {
+        if (!historyRef.current[it.id]) historyRef.current[it.id] = [];
+        historyRef.current[it.id].push({ t: new Date().toLocaleTimeString(), v: it.price ?? 0 });
+        if (historyRef.current[it.id].length > 20) historyRef.current[it.id].shift();
+      });
+    } catch (err) {
+      console.error("Local API fetch error", err);
+    }
+  }
+
+  useEffect(() => {
+    fetchPrices();
+    const id = setInterval(fetchPrices, POLL);
+    return () => clearInterval(id);
+  }, []);
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-slate-50 md:hidden">
+      <header className="p-4 bg-white shadow-sm sticky top-0 z-20">
+        <h1 className="text-lg font-semibold">قیمت‌های لحظه‌ای طلا و ارز</h1>
+        <p className="text-sm text-slate-500">آپدیت هر ۳۰ ثانیه — موبایل فقط</p>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <main className="p-4 space-y-4">
+        <div className="flex gap-2">
+          <input value={query} onChange={e => setQuery(e.target.value)} placeholder="جستجو..." className="flex-1 p-2 rounded-lg border" />
+          <select value={karatFilter} onChange={e => setKaratFilter(e.target.value)} className="p-2 rounded-lg border">
+            <option value="all">همه عیارها</option>
+            <option value="18">18 عیار</option>
+            <option value="24">24 عیار</option>
+          </select>
+          <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)} className="p-2 rounded-lg border">
+            <option value="all">همه</option>
+            <option value="abshode">آب شده</option>
+            <option value="sekke">سکه</option>
+            <option value="currency">دلار</option>
+          </select>
+        </div>
+
+        <div className="space-y-3">
+          {visibleList.map(p => {
+            const data = historyRef.current[p.id] ?? [];
+            const price = items.find(it => it.id === p.id)?.price ?? "—";
+            return (
+              <div key={p.id} className="bg-white p-3 rounded-lg shadow-sm">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="font-medium">{p.label}</div>
+                    <div className="text-xs text-slate-500">آخرین بروزرسانی: {data.length ? data[data.length - 1].t : "—"}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-semibold">{price === null ? "—" : new Intl.NumberFormat("fa-IR").format(price)}</div>
+                    <div className="text-xs text-slate-400">{currency}</div>
+                  </div>
+                </div>
+
+                <div className="h-36 mt-3">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={data}>
+                      <XAxis dataKey="t" hide />
+                      <YAxis hide />
+                      <Tooltip />
+                      <Line type="monotone" dataKey="v" stroke="#8884d8" dot={false} strokeWidth={2} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            );
+          })}
+
+          {visibleList.length === 0 && <div className="text-center text-slate-500 py-8">موردی مطابق فیلتر شما پیدا نشد.</div>}
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      <footer className="p-4 text-center text-xs text-slate-500">اطلاعات از TGJU (نسخه غیررسمی) — آپدیت هر ۳۰ ثانیه</footer>
     </div>
   );
 }
