@@ -118,7 +118,8 @@ export default function Page() {
                 <div>
                   <div className="font-medium text-gray-800">{p.label}</div>
                   <div className="text-xs text-gray-500">
-                    آخرین بروزرسانی: {data.length ? data[data.length - 1].t : "—"}
+                    آخرین بروزرسانی:{" "}
+                    {data.length ? data[data.length - 1].t : "—"}
                   </div>
                 </div>
                 <div className="text-right">
@@ -174,11 +175,17 @@ export default function Page() {
             <div className="h-48 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
-                  data={(historyRef.current[selectedItem] ?? []).slice().sort((a, b) => new Date(a.t) - new Date(b.t))}
+                  data={(historyRef.current[selectedItem] ?? [])
+                    .slice()
+                    .sort((a, b) => new Date(a.t) - new Date(b.t))}
                   margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
                 >
                   <CartesianGrid stroke="#e0e0e0" strokeDasharray="3 3" />
-                  <XAxis dataKey="t" tick={{ fontSize: 10, fill: "#4b5563" }} padding={{ left: 10, right: 10 }} />
+                  <XAxis
+                    dataKey="t"
+                    tick={{ fontSize: 10, fill: "#4b5563" }}
+                    padding={{ left: 10, right: 10 }}
+                  />
                   <YAxis tick={{ fontSize: 10, fill: "#4b5563" }} width={40} />
                   <Tooltip
                     contentStyle={{
