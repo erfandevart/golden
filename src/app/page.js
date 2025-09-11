@@ -80,7 +80,7 @@ export default function Page() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="جستجو..."
-          className="flex-1 p-2 rounded-xl border border-blue-950 bg-[#1e293b] text-blue-100 placeholder-blue-400 focus:ring-1 focus:ring-blue-400 focus:outline-none"
+          className="flex-1 p-2 rounded-xl border border-blue-950 bg-[#1e293b] text-blue-100 placeholder-blue-100 focus:ring-1 focus:ring-blue-400 focus:outline-none"
         />
         <select
           value={karatFilter}
