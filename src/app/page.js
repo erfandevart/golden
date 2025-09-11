@@ -17,7 +17,7 @@ export default function Page() {
   const [karatFilter, setKaratFilter] = useState("all");
   const [currency, setCurrency] = useState("IRR");
   const [items, setItems] = useState([]);
-  const [selectedItem, setSelectedItem] = useState(null); // برای مدال
+  const [selectedItem, setSelectedItem] = useState(null);
   const historyRef = useRef({});
   const POLL = 30000;
 
@@ -74,18 +74,18 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-100 md:hidden font-sans p-4 space-y-4">
+    <div className="min-h-screen bg-[#0b1120] text-blue-100 md:hidden font-sans p-4 space-y-4">
       <div className="flex gap-1 mb-4">
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="جستجو..."
-          className="flex-1 p-2 rounded-xl border border-gray-300 shadow-sm focus:ring-1 focus:ring-indigo-500 focus:outline-none"
+          className="flex-1 p-2 rounded-xl border border-blue-950 bg-[#1e293b] text-blue-100 placeholder-blue-400 focus:ring-1 focus:ring-blue-400 focus:outline-none"
         />
         <select
           value={karatFilter}
           onChange={(e) => setKaratFilter(e.target.value)}
-          className="p-2 rounded-xl border border-gray-300 shadow-sm"
+          className="p-2 rounded-xl border border-blue-950 bg-[#1e293b] text-blue-100"
         >
           <option value="all">همه عیارها</option>
           <option value="18">18 عیار</option>
@@ -94,7 +94,7 @@ export default function Page() {
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="p-2 rounded-xl border border-gray-300 shadow-sm"
+          className="p-2 rounded-xl border border-blue-950 bg-[#1e293b] text-blue-100"
         >
           <option value="all">همه</option>
           <option value="abshode">آب شده</option>
@@ -111,24 +111,24 @@ export default function Page() {
           return (
             <div
               key={p.id}
-              className="bg-white/60 backdrop-blur-md p-4 rounded-2xl shadow-lg cursor-pointer hover:scale-[1.02] transition-transform"
+              className="bg-[#1e293b] p-4 rounded-2xl shadow-lg cursor-pointer hover:scale-[1.02] transition-transform"
               onClick={() => setSelectedItem(p.id)}
             >
               <div className="flex justify-between items-center">
                 <div>
-                  <div className="font-medium text-gray-800">{p.label}</div>
-                  <div className="text-xs text-gray-500">
+                  <div className="font-medium text-blue-100">{p.label}</div>
+                  <div className="text-xs text-blue-400">
                     آخرین بروزرسانی:{" "}
                     {data.length ? data[data.length - 1].t : "—"}
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-lg font-semibold text-gray-900">
+                  <div className="text-lg font-semibold text-white">
                     {price === null
                       ? "—"
                       : new Intl.NumberFormat("fa-IR").format(price)}
                   </div>
-                  <div className="text-xs text-gray-400">{currency}</div>
+                  <div className="text-xs text-blue-400">{currency}</div>
                 </div>
               </div>
 
@@ -137,11 +137,18 @@ export default function Page() {
                   <LineChart data={data}>
                     <XAxis dataKey="t" hide />
                     <YAxis hide />
-                    <Tooltip />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "#1e293bcc",
+                        border: "1px solid #3b82f6",
+                        color: "#e0f2fe",
+                      }}
+                      labelStyle={{ color: "#e0f2fe" }}
+                    />
                     <Line
                       type="monotone"
                       dataKey="v"
-                      stroke="#6366f1"
+                      stroke="#3b82f6"
                       dot={false}
                       strokeWidth={2}
                     />
@@ -153,7 +160,7 @@ export default function Page() {
         })}
 
         {visibleList.length === 0 && (
-          <div className="text-center text-gray-500 py-8">
+          <div className="text-center text-blue-400 py-8">
             موردی مطابق فیلتر شما پیدا نشد.
           </div>
         )}
@@ -161,11 +168,11 @@ export default function Page() {
 
       {selectedItem && (
         <div
-          className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedItem(null)}
         >
           <div
-            className="bg-white/70 backdrop-blur-xl rounded-3xl p-5 max-w-xs w-full flex flex-col items-center"
+            className="bg-[#1e293b] rounded-3xl p-5 max-w-xs w-full flex flex-col items-center text-blue-100"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-lg font-semibold mb-4 text-center">
@@ -180,26 +187,27 @@ export default function Page() {
                     .sort((a, b) => new Date(a.t) - new Date(b.t))}
                   margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
                 >
-                  <CartesianGrid stroke="#e0e0e0" strokeDasharray="3 3" />
+                  <CartesianGrid stroke="#334155" strokeDasharray="3 3" />
                   <XAxis
                     dataKey="t"
-                    tick={{ fontSize: 10, fill: "#4b5563" }}
+                    tick={{ fontSize: 10, fill: "#94a3b8" }}
                     padding={{ left: 10, right: 10 }}
                   />
-                  <YAxis tick={{ fontSize: 10, fill: "#4b5563" }} width={40} />
+                  <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} width={40} />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#ffffffcc",
-                      border: "1px solid #ccc",
+                      backgroundColor: "#1e293bcc",
+                      border: "1px solid #3b82f6",
                       borderRadius: "8px",
                       padding: "6px",
+                      color: "#e0f2fe",
                     }}
-                    labelStyle={{ color: "#111827", fontSize: 12 }}
+                    labelStyle={{ color: "#e0f2fe", fontSize: 12 }}
                   />
                   <Line
                     type="monotone"
                     dataKey="v"
-                    stroke="#6366f1"
+                    stroke="#3b82f6"
                     strokeWidth={2}
                     dot={{ r: 3 }}
                     activeDot={{ r: 5 }}
