@@ -12,13 +12,24 @@ export default function Page() {
   const historyRef = useRef({});
   const POLL = 30000;
 
-  const PRODUCT_MAP = [
-    { id: "gold_18", label: "طلای 18 عیار", kind: "abshode", karat: 18 },
-    { id: "gold_24", label: "طلای 24 عیار", kind: "abshode", karat: 24 },
-    { id: "sekke", label: "سکه تمام بهار", kind: "sekke", karat: 24 },
-    { id: "sekke_emami", label: "سکه امامی", kind: "sekke", karat: 24 },
-    { id: "usd", label: "دلار", kind: "currency", karat: null },
-  ];
+  // const PRODUCT_MAP = [
+  //   { id: "gold_18", label: "طلای 18 عیار", kind: "abshode", karat: 18 },
+  //   { id: "gold_24", label: "طلای 24 عیار", kind: "abshode", karat: 24 },
+  //   { id: "sekke", label: "سکه تمام بهار", kind: "sekke", karat: 24 },
+  //   { id: "sekke_emami", label: "سکه امامی", kind: "sekke", karat: 24 },
+  //   { id: "usd", label: "دلار", kind: "currency", karat: null },
+  // ];
+
+const PRODUCT_MAP = [
+  { id: "mesghal_gold", label: "مثقال طلا", kind: "abshode", karat: 17.5 }, // تقریبی
+  { id: "gold_18", label: "طلای ۱۸ عیار", kind: "abshode", karat: 18 },
+  { id: "sekke_emami", label: "سکه امامی (طرح جدید)", kind: "sekke", karat: 24 },
+  { id: "sekke_bahar", label: "سکه بهار آزادی (طرح قدیم)", kind: "sekke", karat: 24 },
+  { id: "half_sekke", label: "نیم سکه ۸۶", kind: "sekke", karat: 24 },
+  { id: "quarter_sekke", label: "ربع سکه ۸۶", kind: "sekke", karat: 24 },
+  { id: "usd", label: "دلار آمریکا", kind: "currency", karat: null },
+];
+
 
   const visibleList = PRODUCT_MAP.filter((p) => {
     if (typeFilter !== "all" && p.kind !== typeFilter) return false;
