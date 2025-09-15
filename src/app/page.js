@@ -1,15 +1,6 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
 
 export default function Page() {
   const [query, setQuery] = useState("");
@@ -73,7 +64,7 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-[#0b1120] text-blue-100 md:hidden font-sans p-4 space-y-3">
-      {/* فیلتر و جستجو جمع‌وجور */}
+      {/* فیلتر و جستجو */}
       <div className="flex gap-1 mb-3 text-sm w-full">
         <input
           value={query}
@@ -128,24 +119,6 @@ export default function Page() {
                   <div className="text-xs text-blue-400">{currency}</div>
                 </div>
               </div>
-
-              <div className="h-28 mt-2">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={data}>
-                    <XAxis dataKey="t" hide />
-                    <YAxis hide />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#1e293bcc",
-                        border: "1px solid #3b82f6",
-                        color: "#e0f2fe",
-                      }}
-                      labelStyle={{ color: "#e0f2fe" }}
-                    />
-                    <Line type="monotone" dataKey="v" stroke="#3b82f6" dot={false} strokeWidth={2} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
             </div>
           );
         })}
@@ -157,7 +130,7 @@ export default function Page() {
         )}
       </div>
 
-      {/* مودال جزئیات */}
+      {/* مودال جزئیات ساده */}
       {selectedItem && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
@@ -171,34 +144,16 @@ export default function Page() {
               {PRODUCT_MAP.find((p) => p.id === selectedItem)?.label}
             </h2>
 
-            <div className="h-48 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                  data={(historyRef.current[selectedItem] ?? [])
-                    .slice()
-                    .sort((a, b) => new Date(a.t) - new Date(b.t))}
-                  margin={{ top: 10, right: 10, left: 0, bottom: 10 }}
-                >
-                  <CartesianGrid stroke="#334155" strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="t"
-                    tick={{ fontSize: 10, fill: "#94a3b8" }}
-                    padding={{ left: 10, right: 10 }}
-                  />
-                  <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} width={40} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#1e293bcc",
-                      border: "1px solid #3b82f6",
-                      borderRadius: "8px",
-                      padding: "6px",
-                      color: "#e0f2fe",
-                    }}
-                    labelStyle={{ color: "#e0f2fe", fontSize: 12 }}
-                  />
-                  <Line type="monotone" dataKey="v" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
-                </LineChart>
-              </ResponsiveContainer>
+            <div className="text-center text-white text-lg mb-2">
+              قیمت:{" "}
+              {items.find((it) => it.id === selectedItem)?.price
+                ? new Intl.NumberFormat("fa-IR").format(items.find((it) => it.id === selectedItem)?.price)
+                : "—"}{" "}
+              {currency}
+            </div>
+            <div className="text-blue-400 text-sm">
+              آخرین بروزرسانی:{" "}
+              {(historyRef.current[selectedItem]?.slice(-1)[0]?.t) ?? "—"}
             </div>
           </div>
         </div>
