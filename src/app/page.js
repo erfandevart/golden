@@ -74,7 +74,7 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-[#0b1120] text-blue-100 md:hidden font-sans p-4 space-y-3">
       {/* فیلتر و جستجو جمع‌وجور */}
-      <div className="flex gap-1 mb-3 text-sm">
+      <div className="flex gap-1 mb-3 text-sm w-full">
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -84,7 +84,7 @@ export default function Page() {
         <select
           value={karatFilter}
           onChange={(e) => setKaratFilter(e.target.value)}
-          className="p-1.5 rounded-lg border border-blue-950 bg-[#1e293b] text-blue-100"
+          className="p-1.5 w-full rounded-lg border border-blue-950 bg-[#1e293b] text-blue-100"
         >
           <option value="all">همه عیارها</option>
           <option value="18">18 عیار</option>
@@ -93,7 +93,7 @@ export default function Page() {
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="p-1.5 rounded-lg border border-blue-950 bg-[#1e293b] text-blue-100"
+          className="p-1.5 w-full rounded-lg border border-blue-950 bg-[#1e293b] text-blue-100"
         >
           <option value="all">همه</option>
           <option value="abshode">آب شده</option>
