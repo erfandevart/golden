@@ -31,8 +31,7 @@ export default function Page() {
 
   const visibleList = PRODUCT_MAP.filter((p) => {
     if (typeFilter !== "all" && p.kind !== typeFilter) return false;
-    if (karatFilter !== "all" && String(p.karat) !== String(karatFilter))
-      return false;
+    if (karatFilter !== "all" && String(p.karat) !== String(karatFilter)) return false;
     if (query && !p.label.includes(query)) return false;
     return true;
   });
@@ -59,8 +58,7 @@ export default function Page() {
           t: new Date().toLocaleTimeString(),
           v: it.price ?? 0,
         });
-        if (historyRef.current[it.id].length > 50)
-          historyRef.current[it.id].shift();
+        if (historyRef.current[it.id].length > 50) historyRef.current[it.id].shift();
       });
     } catch (err) {
       console.error("Local API fetch error", err);
@@ -74,18 +72,19 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0b1120] text-blue-100 md:hidden font-sans p-4 space-y-4">
-      <div className="flex gap-1 mb-4">
+    <div className="min-h-screen bg-[#0b1120] text-blue-100 md:hidden font-sans p-4 space-y-3">
+      {/* فیلتر و جستجو جمع‌وجور */}
+      <div className="flex gap-1 mb-3 text-sm">
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="جستجو..."
-          className="flex-1 p-2 rounded-xl border border-blue-950 bg-[#1e293b] text-blue-100 placeholder-blue-100 focus:ring-1 focus:ring-blue-400 focus:outline-none"
+          className="flex-1 p-1.5 rounded-lg border border-blue-950 bg-[#1e293b] text-blue-100 placeholder-blue-100 focus:ring-1 focus:ring-blue-400 focus:outline-none"
         />
         <select
           value={karatFilter}
           onChange={(e) => setKaratFilter(e.target.value)}
-          className="p-2 rounded-xl border border-blue-950 bg-[#1e293b] text-blue-100"
+          className="p-1.5 rounded-lg border border-blue-950 bg-[#1e293b] text-blue-100"
         >
           <option value="all">همه عیارها</option>
           <option value="18">18 عیار</option>
@@ -94,7 +93,7 @@ export default function Page() {
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="p-2 rounded-xl border border-blue-950 bg-[#1e293b] text-blue-100"
+          className="p-1.5 rounded-lg border border-blue-950 bg-[#1e293b] text-blue-100"
         >
           <option value="all">همه</option>
           <option value="abshode">آب شده</option>
@@ -103,7 +102,8 @@ export default function Page() {
         </select>
       </div>
 
-      <div className="space-y-3">
+      {/* کارت‌ها */}
+      <div className="space-y-2">
         {visibleList.map((p) => {
           const data = historyRef.current[p.id] ?? [];
           const price = items.find((it) => it.id === p.id)?.price ?? "—";
@@ -111,28 +111,25 @@ export default function Page() {
           return (
             <div
               key={p.id}
-              className="bg-[#1e293b] p-4 rounded-2xl shadow-lg cursor-pointer hover:scale-[1.02] transition-transform"
+              className="bg-[#1e293b] p-3 rounded-xl shadow-md cursor-pointer hover:scale-[1.02] transition-transform"
               onClick={() => setSelectedItem(p.id)}
             >
               <div className="flex justify-between items-center">
                 <div>
                   <div className="font-medium text-blue-100">{p.label}</div>
                   <div className="text-xs text-blue-400">
-                    آخرین بروزرسانی:{" "}
-                    {data.length ? data[data.length - 1].t : "—"}
+                    آخرین بروزرسانی: {data.length ? data[data.length - 1].t : "—"}
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-lg font-semibold text-white">
-                    {price === null
-                      ? "—"
-                      : new Intl.NumberFormat("fa-IR").format(price)}
+                    {price === null ? "—" : new Intl.NumberFormat("fa-IR").format(price)}
                   </div>
                   <div className="text-xs text-blue-400">{currency}</div>
                 </div>
               </div>
 
-              <div className="h-36 mt-3">
+              <div className="h-28 mt-2">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={data}>
                     <XAxis dataKey="t" hide />
@@ -145,13 +142,7 @@ export default function Page() {
                       }}
                       labelStyle={{ color: "#e0f2fe" }}
                     />
-                    <Line
-                      type="monotone"
-                      dataKey="v"
-                      stroke="#3b82f6"
-                      dot={false}
-                      strokeWidth={2}
-                    />
+                    <Line type="monotone" dataKey="v" stroke="#3b82f6" dot={false} strokeWidth={2} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -160,12 +151,13 @@ export default function Page() {
         })}
 
         {visibleList.length === 0 && (
-          <div className="text-center text-blue-400 py-8">
+          <div className="text-center text-blue-400 py-6">
             موردی مطابق فیلتر شما پیدا نشد.
           </div>
         )}
       </div>
 
+      {/* مودال جزئیات */}
       {selectedItem && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
@@ -204,14 +196,7 @@ export default function Page() {
                     }}
                     labelStyle={{ color: "#e0f2fe", fontSize: 12 }}
                   />
-                  <Line
-                    type="monotone"
-                    dataKey="v"
-                    stroke="#3b82f6"
-                    strokeWidth={2}
-                    dot={{ r: 3 }}
-                    activeDot={{ r: 5 }}
-                  />
+                  <Line type="monotone" dataKey="v" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3 }} activeDot={{ r: 5 }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
