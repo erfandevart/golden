@@ -29,7 +29,7 @@ export default function Page() {
 
   async function fetchPrices() {
     try {
-      const res = await fetch("/api/prices");
+      const res = await fetch("/api");
       const json = await res.json();
       console.log("📥 API Response:", json);
 
