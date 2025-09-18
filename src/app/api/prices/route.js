@@ -53,7 +53,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  console.log("🔔 /api request received");
+  console.log("🔔 /api/prices request received");
 
   // بررسی محیط اجرای درخواست
   const isProduction =
@@ -80,7 +80,10 @@ export async function GET() {
 
     if (!res.ok) {
       console.error("❌ API error:", res.status);
-      return NextResponse.json({ error: "Cannot fetch prices" }, { status: res.status });
+      return NextResponse.json(
+        { error: "Cannot fetch prices" },
+        { status: res.status }
+      );
     }
 
     const json = await res.json();
