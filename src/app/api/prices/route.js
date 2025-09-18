@@ -55,17 +55,14 @@ import { NextResponse } from "next/server";
 export async function GET() {
   console.log("🔔 /api/prices request received");
 
-  // فقط روی Vercel با دامنه واقعی اجازه دسترسی به TGNSRV
+  // بررسی اینکه روی دامنه رسمی اجرا میشه
   const isProduction =
     process.env.NODE_ENV === "production" &&
     process.env.VERCEL_URL?.includes("aboutalebijewelry.ir");
 
   if (!isProduction) {
-    console.warn("⚠️ Not production or wrong domain: cannot fetch live prices");
-    return NextResponse.json(
-      { error: "Unauthorized: use correct domain on Vercel" },
-      { status: 401 }
-    );
+    console.log("🟡 Local development - API call blocked, only runs on production domain");
+    return NextResponse.json({ error: "Local development - API call blocked" });
   }
 
   try {
@@ -74,21 +71,24 @@ export async function GET() {
       {
         cache: "no-store",
         headers: {
-          Origin: "https://www.aboutalebijewelry.ir",
-          Referer: "https://www.aboutalebijewelry.ir/",
+          "Origin": "https://www.aboutalebijewelry.ir",
+          "Referer": "https://www.aboutalebijewelry.ir/",
         },
       }
     );
 
     if (!res.ok) {
-      console.error("❌ API error:", res.status);
-      return NextResponse.json({ error: "Cannot fetch prices" }, { status: res.status });
+      console.error("❌ TGNSRV API error:", res.status, res.statusText);
+      return NextResponse.json(
+        { error: `Cannot fetch prices, status ${res.status}` },
+        { status: res.status }
+      );
     }
 
     const json = await res.json();
-    console.log("📥 Raw API data:", json);
+    console.log("📥 TGNSRV API Response:", json);
 
-    return NextResponse.json(json);
+    return NextResponse.json(json); // فقط ریسپانس خام رو برمیگردونه
   } catch (err) {
     console.error("💥 Price fetching error:", err);
     return NextResponse.json({ error: "Cannot fetch prices" }, { status: 500 });
