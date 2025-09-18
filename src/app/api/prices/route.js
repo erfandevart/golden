@@ -55,14 +55,17 @@ import { NextResponse } from "next/server";
 export async function GET() {
   console.log("🔔 /api/prices request received");
 
-  // فقط وقتی روی ورسل با دامنه درست هست
+  // فقط روی Vercel با دامنه واقعی اجازه دسترسی به TGNSRV
   const isProduction =
     process.env.NODE_ENV === "production" &&
     process.env.VERCEL_URL?.includes("aboutalebijewelry.ir");
 
   if (!isProduction) {
     console.warn("⚠️ Not production or wrong domain: cannot fetch live prices");
-    return NextResponse.json({ error: "Unauthorized: use correct domain on Vercel" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Unauthorized: use correct domain on Vercel" },
+      { status: 401 }
+    );
   }
 
   try {
