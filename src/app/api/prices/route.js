@@ -55,14 +55,22 @@ import { NextResponse } from "next/server";
 export async function GET() {
   console.log("🔔 /api/prices request received");
 
-  // بررسی اینکه روی دامنه رسمی اجرا میشه
+  // بررسی اینکه روی Vercel و دامنه رسمی هستیم
   const isProduction =
     process.env.NODE_ENV === "production" &&
     process.env.VERCEL_URL?.includes("aboutalebijewelry.ir");
 
   if (!isProduction) {
-    console.log("🟡 Local development - API call blocked, only runs on production domain");
-    return NextResponse.json({ error: "Local development - API call blocked" });
+    console.log("🟡 Local dev mode: returning fake data");
+    const mockData = {
+      gold_18: { p: 15000000 },
+      gold_24: { p: 20000000 },
+      sekke: { p: 120000000 },
+      sekke_emami: { p: 125000000 },
+      price_dollar_rl: { p: 102000 }, // تومان
+    };
+    console.log("📥 API Response (mock):", mockData);
+    return NextResponse.json(mockData);
   }
 
   try {
@@ -71,14 +79,14 @@ export async function GET() {
       {
         cache: "no-store",
         headers: {
-          "Origin": "https://www.aboutalebijewelry.ir",
-          "Referer": "https://www.aboutalebijewelry.ir/",
+          Origin: "https://www.aboutalebijewelry.ir",
+          Referer: "https://www.aboutalebijewelry.ir/",
         },
       }
     );
 
     if (!res.ok) {
-      console.error("❌ TGNSRV API error:", res.status, res.statusText);
+      console.error("❌ API error:", res.status, await res.text());
       return NextResponse.json(
         { error: `Cannot fetch prices, status ${res.status}` },
         { status: res.status }
@@ -86,9 +94,9 @@ export async function GET() {
     }
 
     const json = await res.json();
-    console.log("📥 TGNSRV API Response:", json);
+    console.log("📥 API Response (real):", json);
 
-    return NextResponse.json(json); // فقط ریسپانس خام رو برمیگردونه
+    return NextResponse.json(json);
   } catch (err) {
     console.error("💥 Price fetching error:", err);
     return NextResponse.json({ error: "Cannot fetch prices" }, { status: 500 });
