@@ -12,24 +12,13 @@ export default function Page() {
   const historyRef = useRef({});
   const POLL = 30000;
 
-  // const PRODUCT_MAP = [
-  //   { id: "gold_18", label: "طلای 18 عیار", kind: "abshode", karat: 18 },
-  //   { id: "gold_24", label: "طلای 24 عیار", kind: "abshode", karat: 24 },
-  //   { id: "sekke", label: "سکه تمام بهار", kind: "sekke", karat: 24 },
-  //   { id: "sekke_emami", label: "سکه امامی", kind: "sekke", karat: 24 },
-  //   { id: "usd", label: "دلار", kind: "currency", karat: null },
-  // ];
-
-const PRODUCT_MAP = [
-  { id: "mesghal_gold", label: "مثقال طلا", kind: "abshode", karat: 17.5 }, // تقریبی
-  { id: "gold_18", label: "طلای ۱۸ عیار", kind: "abshode", karat: 18 },
-  { id: "sekke_emami", label: "سکه امامی (طرح جدید)", kind: "sekke", karat: 24 },
-  { id: "sekke_bahar", label: "سکه بهار آزادی (طرح قدیم)", kind: "sekke", karat: 24 },
-  { id: "half_sekke", label: "نیم سکه ۸۶", kind: "sekke", karat: 24 },
-  { id: "quarter_sekke", label: "ربع سکه ۸۶", kind: "sekke", karat: 24 },
-  { id: "usd", label: "دلار آمریکا", kind: "currency", karat: null },
-];
-
+  const PRODUCT_MAP = [
+    { id: "gold_18", label: "طلای ۱۸ عیار", kind: "abshode", karat: 18 },
+    { id: "gold_24", label: "طلای ۲۴ عیار", kind: "abshode", karat: 24 },
+    { id: "sekke_emami", label: "سکه امامی (طرح جدید)", kind: "sekke", karat: 24 },
+    { id: "sekke", label: "سکه بهار آزادی (طرح قدیم)", kind: "sekke", karat: 24 },
+    { id: "usd", label: "دلار آمریکا", kind: "currency", karat: null },
+  ];
 
   const visibleList = PRODUCT_MAP.filter((p) => {
     if (typeFilter !== "all" && p.kind !== typeFilter) return false;
@@ -42,6 +31,7 @@ const PRODUCT_MAP = [
     try {
       const res = await fetch("/api/prices");
       const json = await res.json();
+      console.log("📥 API Response:", json);
 
       const newItems = PRODUCT_MAP.map((p) => {
         let price = null;
@@ -50,10 +40,12 @@ const PRODUCT_MAP = [
         if (p.id === "sekke") price = json?.sekke?.p;
         if (p.id === "sekke_emami") price = json?.sekke_emami?.p;
         if (p.id === "usd") price = json?.price_dollar_rl?.p;
-        return { id: p.id, label: p.label, price };
-      });
+
+        return price !== null ? { id: p.id, label: p.label, price } : null;
+      }).filter(Boolean);
 
       setItems(newItems);
+
       newItems.forEach((it) => {
         if (!historyRef.current[it.id]) historyRef.current[it.id] = [];
         historyRef.current[it.id].push({
@@ -89,8 +81,9 @@ const PRODUCT_MAP = [
           className="p-1.5 w-full rounded-lg border border-blue-950 bg-[#1e293b] text-blue-100"
         >
           <option value="all">همه عیارها</option>
-          <option value="18">18 عیار</option>
-          <option value="24">24 عیار</option>
+          <option value="17.5">17.5</option>
+          <option value="18">18</option>
+          <option value="24">24</option>
         </select>
         <select
           value={typeFilter}
@@ -141,7 +134,7 @@ const PRODUCT_MAP = [
         )}
       </div>
 
-      {/* مودال جزئیات ساده */}
+      {/* مودال جزئیات */}
       {selectedItem && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
