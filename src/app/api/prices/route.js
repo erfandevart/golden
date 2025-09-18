@@ -53,7 +53,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  console.log("🔔 /api/prices request received");
+  console.log("🔔 /api request received");
 
   // بررسی محیط اجرای درخواست
   const isProduction =
