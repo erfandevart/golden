@@ -33,16 +33,17 @@ export default function Page() {
       const json = await res.json();
       console.log("📥 API Response:", json);
 
-      const newItems = PRODUCT_MAP.map((p) => {
-        let price = null;
-        if (p.id === "gold_18") price = json?.gold_18?.p;
-        if (p.id === "gold_24") price = json?.gold_24?.p;
-        if (p.id === "sekke") price = json?.sekke?.p;
-        if (p.id === "sekke_emami") price = json?.sekke_emami?.p;
-        if (p.id === "usd") price = json?.price_dollar_rl?.p;
+const newItems = PRODUCT_MAP.map((p) => {
+  let price = null;
+  if (p.id === "gold_18") price = json?.gold_18?.p;
+  if (p.id === "gold_24") price = json?.gold_24?.p;
+  if (p.id === "sekke") price = json?.sekke?.p;
+  if (p.id === "sekke_emami") price = json?.sekke_emami?.p;
+  if (p.id === "usd") price = json?.price_dollar_rl?.p;
 
-        return price !== null ? { id: p.id, label: p.label, price } : null;
-      }).filter(Boolean);
+  if (price !== null) price = price * 10; // تبدیل تومان به ریال
+  return price !== null ? { id: p.id, label: p.label, price } : null;
+}).filter(Boolean);
 
       setItems(newItems);
 
