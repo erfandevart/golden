@@ -15,20 +15,14 @@
 //   const historyRef = useRef({});
 //   const POLL = 30000;
 
+//   // فقط آیتم‌هایی که در داده‌ها وجود دارن
 //   const PRODUCT_MAP = [
-//     { id: "gold_18", label: "طلای ۱۸ عیار", kind: "abshode", karat: 18 },
-//     { id: "gold_24", label: "طلای ۲۴ عیار", kind: "abshode", karat: 24 },
 //     { id: "sekke_emami", label: "سکه امامی (طرح جدید)", kind: "sekke", karat: 24 },
 //     { id: "sekke", label: "سکه بهار آزادی (طرح قدیم)", kind: "sekke", karat: 24 },
 //     { id: "usd", label: "دلار آمریکا", kind: "currency", karat: null },
 //     { id: "derham", label: "درهم امارات", kind: "currency", karat: null },
 //     { id: "euro", label: "یورو", kind: "currency", karat: null },
-//     { id: "ounce_gold", label: "انس طلا", kind: "gold", karat: null },
-//     { id: "ounce_silver", label: "انس نقره", kind: "silver", karat: null },
-//     { id: "pelatin", label: "پلاتین", kind: "metal", karat: null },
 //     { id: "YekGram18", label: "یک گرم طلای ۱۸ عیار", kind: "gold", karat: 18 },
-//     { id: "YekMesghal18", label: "یک مثقال طلای ۱۸ عیار", kind: "gold", karat: 18 },
-//     { id: "YekMesghal17", label: "یک مثقال طلای 17 عیار", kind: "gold", karat: 17 },
 //     { id: "SekehRob", label: "سکه ربع", kind: "sekke", karat: 24 },
 //     { id: "SekehNim", label: "نیم سکه", kind: "sekke", karat: 24 },
 //     { id: "SekehTamam", label: "سکه تمام طرح جدید", kind: "sekke", karat: 24 },
@@ -47,11 +41,11 @@
 //   useEffect(() => {
 //     const fetchRates = async () => {
 //       try {
-//         const response = await axios.get('https://webservice.tgnsrv.ir/Pr/Get/aboutalebijewelry6468/a09134386468a');
+//         const response = await axios.get("/api/rates"); // API داخلی یا مستقیم
 //         setRates(response.data);
 //         setLoading(false);
 //       } catch (err) {
-//         setError('Failed to fetch data');
+//         setError("Failed to fetch data");
 //         setLoading(false);
 //       }
 //     };
@@ -66,22 +60,20 @@
 
 //   const newItems = PRODUCT_MAP.map((p) => {
 //     let price = null;
-//     if (p.id === "gold_18") price = rates?.YekGram18;
-//     if (p.id === "gold_24") price = rates?.YekGram24;
-//     if (p.id === "sekke") price = rates?.Sekeh;
-//     if (p.id === "sekke_emami") price = rates?.SekehEmam;
-//     if (p.id === "usd") price = rates?.Dollar;
-//     if (p.id === "derham") price = rates?.Derham;
-//     if (p.id === "euro") price = rates?.Euro;
-//     if (p.id === "ounce_gold") price = rates?.OunceTala;
-//     if (p.id === "ounce_silver") price = rates?.OunceNoghreh;
-//     if (p.id === "pelatin") price = rates?.Pelatin;
-//     if (p.id === "SekehRob") price = rates?.SekehRob;
-//     if (p.id === "SekehNim") price = rates?.SekehNim;
-//     if (p.id === "SekehTamam") price = rates?.SekehTamam;
-//     if (p.id === "SekehGerami") price = rates?.SekehGerami;
-//     if (p.id === "YekGram20") price = rates?.YekGram20;
-//     if (p.id === "YekGram21") price = rates?.YekGram21;
+//     switch (p.id) {
+//       case "sekke": price = rates?.Sekeh; break;
+//       case "sekke_emami": price = rates?.SekehEmam; break;
+//       case "usd": price = rates?.Dollar; break;
+//       case "derham": price = rates?.Derham; break;
+//       case "euro": price = rates?.Euro; break;
+//       case "YekGram18": price = rates?.YekGram18; break;
+//       case "SekehRob": price = rates?.SekehRob; break;
+//       case "SekehNim": price = rates?.SekehNim; break;
+//       case "SekehTamam": price = rates?.SekehTamam; break;
+//       case "SekehGerami": price = rates?.SekehGerami; break;
+//       case "YekGram20": price = rates?.YekGram20; break;
+//       case "YekGram21": price = rates?.YekGram21; break;
+//     }
 
 //     if (price !== null) price = price * 10; // تبدیل تومان به ریال
 //     return price !== null ? { id: p.id, label: p.label, price } : null;
@@ -189,7 +181,6 @@
 // }
 
 
-
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
@@ -208,30 +199,24 @@ export default function Page() {
   const POLL = 30000;
 
   const PRODUCT_MAP = [
-    { id: "gold_18", label: "طلای ۱۸ عیار", kind: "abshode", karat: 18 },
-    { id: "gold_24", label: "طلای ۲۴ عیار", kind: "abshode", karat: 24 },
-    { id: "sekke_emami", label: "سکه امامی (طرح جدید)", kind: "sekke", karat: 24 },
-    { id: "sekke", label: "سکه بهار آزادی (طرح قدیم)", kind: "sekke", karat: 24 },
-    { id: "usd", label: "دلار آمریکا", kind: "currency", karat: null },
-    { id: "derham", label: "درهم امارات", kind: "currency", karat: null },
-    { id: "euro", label: "یورو", kind: "currency", karat: null },
+    { id: "YekGram18", label: "طلای ۱۸ عیار", kind: "gold", karat: 18 },
+    { id: "YekGram20", label: "طلای ۲۰ عیار", kind: "gold", karat: 20 },
+    { id: "YekGram21", label: "طلای ۲۱ عیار", kind: "gold", karat: 21 },
     { id: "ounce_gold", label: "انس طلا", kind: "gold", karat: null },
-    { id: "ounce_silver", label: "انس نقره", kind: "silver", karat: null },
-    { id: "pelatin", label: "پلاتین", kind: "metal", karat: null },
-    { id: "YekGram18", label: "یک گرم طلای ۱۸ عیار", kind: "gold", karat: 18 },
-    { id: "YekMesghal18", label: "یک مثقال طلای ۱۸ عیار", kind: "gold", karat: 18 },
-    { id: "YekMesghal17", label: "یک مثقال طلای 17 عیار", kind: "gold", karat: 17 },
-    { id: "SekehRob", label: "سکه ربع", kind: "sekke", karat: 24 },
+    { id: "sekke_emami", label: "سکه امامی", kind: "sekke", karat: 24 },
+    { id: "SekehRob", label: "ربع سکه", kind: "sekke", karat: 24 },
     { id: "SekehNim", label: "نیم سکه", kind: "sekke", karat: 24 },
     { id: "SekehTamam", label: "سکه تمام طرح جدید", kind: "sekke", karat: 24 },
     { id: "SekehGerami", label: "سکه گرمی", kind: "sekke", karat: 24 },
-    { id: "YekGram20", label: "یک گرم طلای ۲۰ عیار", kind: "gold", karat: 20 },
-    { id: "YekGram21", label: "یک گرم طلای ۲۱ عیار", kind: "gold", karat: 21 },
+    { id: "usd", label: "دلار آمریکا", kind: "currency", karat: null },
+    { id: "derham", label: "درهم امارات", kind: "currency", karat: null },
+    { id: "euro", label: "یورو", kind: "currency", karat: null },
   ];
 
+  // لیست فیلترشده بر اساس نوع، عیار و جستجو
   const visibleList = PRODUCT_MAP.filter((p) => {
     if (typeFilter !== "all" && p.kind !== typeFilter) return false;
-    if (karatFilter !== "all" && String(p.karat) !== String(karatFilter)) return false;
+    if (karatFilter !== "all" && p.karat !== null && String(p.karat) !== String(karatFilter)) return false;
     if (query && !p.label.includes(query)) return false;
     return true;
   });
@@ -239,7 +224,7 @@ export default function Page() {
   useEffect(() => {
     const fetchRates = async () => {
       try {
-        const response = await axios.get("/api/rates"); // ← API داخلی
+        const response = await axios.get("/api/rates");
         setRates(response.data);
         setLoading(false);
       } catch (err) {
@@ -256,24 +241,22 @@ export default function Page() {
   if (loading) return <div className="text-center text-xl">Loading...</div>;
   if (error) return <div className="text-center text-xl text-red-500">{error}</div>;
 
-  const newItems = PRODUCT_MAP.map((p) => {
+  const newItems = visibleList.map((p) => {
     let price = null;
-    if (p.id === "gold_18") price = rates?.YekGram18;
-    if (p.id === "gold_24") price = rates?.YekGram24;
-    if (p.id === "sekke") price = rates?.Sekeh;
-    if (p.id === "sekke_emami") price = rates?.SekehEmam;
-    if (p.id === "usd") price = rates?.Dollar;
-    if (p.id === "derham") price = rates?.Derham;
-    if (p.id === "euro") price = rates?.Euro;
-    if (p.id === "ounce_gold") price = rates?.OunceTala;
-    if (p.id === "ounce_silver") price = rates?.OunceNoghreh;
-    if (p.id === "pelatin") price = rates?.Pelatin;
-    if (p.id === "SekehRob") price = rates?.SekehRob;
-    if (p.id === "SekehNim") price = rates?.SekehNim;
-    if (p.id === "SekehTamam") price = rates?.SekehTamam;
-    if (p.id === "SekehGerami") price = rates?.SekehGerami;
-    if (p.id === "YekGram20") price = rates?.YekGram20;
-    if (p.id === "YekGram21") price = rates?.YekGram21;
+    switch (p.id) {
+      case "YekGram18": price = rates?.YekGram18; break;
+      case "YekGram20": price = rates?.YekGram20; break;
+      case "YekGram21": price = rates?.YekGram21; break;
+      case "ounce_gold": price = rates?.OunceTala; break;
+      case "sekke_emami": price = rates?.SekehEmam; break;
+      case "SekehRob": price = rates?.SekehRob; break;
+      case "SekehNim": price = rates?.SekehNim; break;
+      case "SekehTamam": price = rates?.SekehTamam; break;
+      case "SekehGerami": price = rates?.SekehGerami; break;
+      case "usd": price = rates?.Dollar; break;
+      case "derham": price = rates?.Derham; break;
+      case "euro": price = rates?.Euro; break;
+    }
 
     if (price !== null) price = price * 10; // تبدیل تومان به ریال
     return price !== null ? { id: p.id, label: p.label, price } : null;
@@ -295,9 +278,9 @@ export default function Page() {
           className="p-1.5 w-full rounded-lg border border-blue-950 bg-[#1e293b] text-blue-100"
         >
           <option value="all">همه عیارها</option>
-          <option value="17.5">17.5</option>
           <option value="18">18</option>
-          <option value="24">24</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
         </select>
         <select
           value={typeFilter}
@@ -305,9 +288,9 @@ export default function Page() {
           className="p-1.5 w-full rounded-lg border border-blue-950 bg-[#1e293b] text-blue-100"
         >
           <option value="all">همه</option>
-          <option value="abshode">آب شده</option>
+          <option value="gold">طلای آب شده</option>
           <option value="sekke">سکه</option>
-          <option value="currency">دلار و ارزها</option>
+          <option value="currency">ارزها</option>
         </select>
       </div>
 
