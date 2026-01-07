@@ -1,28 +1,3 @@
-/**
- * کامپوننت‌های آیکون SVG
- */
-
-// آیکون هشدار
-export function AlertIcon({ className = "w-5 h-5" }) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-      />
-    </svg>
-  );
-}
-
-// آیکون طلا - شمش طلا
 export function GoldIcon({ className = "w-5 h-5" }) {
   return (
     <svg
@@ -31,22 +6,17 @@ export function GoldIcon({ className = "w-5 h-5" }) {
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* شمش طلا - بدنه اصلی */}
       <rect x="4" y="9" width="16" height="9" rx="1.5" fill="currentColor"/>
-      {/* برجستگی بالای شمش */}
       <path d="M6 9L8 6L10 9H6Z" fill="currentColor"/>
       <path d="M14 9L16 6L18 9H14Z" fill="currentColor"/>
-      {/* خطوط روی شمش */}
       <line x1="7" y1="13" x2="17" y2="13" stroke="currentColor" strokeWidth="0.8" opacity="0.25"/>
       <line x1="7" y1="15" x2="17" y2="15" stroke="currentColor" strokeWidth="0.8" opacity="0.25"/>
       <line x1="7" y1="17" x2="17" y2="17" stroke="currentColor" strokeWidth="0.8" opacity="0.25"/>
-      {/* برچسب/علامت روی شمش */}
       <rect x="9" y="11" width="6" height="4" rx="0.5" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.4"/>
     </svg>
   );
 }
 
-// آیکون سکه
 export function CoinIcon({ className = "w-5 h-5" }) {
   return (
     <svg
@@ -62,7 +32,6 @@ export function CoinIcon({ className = "w-5 h-5" }) {
   );
 }
 
-// آیکون ارز/دلار
 export function CurrencyIcon({ className = "w-5 h-5" }) {
   return (
     <svg
@@ -82,7 +51,6 @@ export function CurrencyIcon({ className = "w-5 h-5" }) {
   );
 }
 
-// آیکون یورو
 export function EuroIcon({ className = "w-5 h-5" }) {
   return (
     <svg
@@ -102,27 +70,6 @@ export function EuroIcon({ className = "w-5 h-5" }) {
   );
 }
 
-// آیکون جستجو/یافت نشد
-export function SearchIcon({ className = "w-5 h-5" }) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-      />
-    </svg>
-  );
-}
-
-// آیکون خالی/یافت نشد
 export function EmptyIcon({ className = "w-5 h-5" }) {
   return (
     <svg
@@ -142,7 +89,6 @@ export function EmptyIcon({ className = "w-5 h-5" }) {
   );
 }
 
-// آیکون درهم
 export function DerhamIcon({ className = "w-5 h-5" }) {
   return (
     <svg
@@ -168,47 +114,6 @@ export function DerhamIcon({ className = "w-5 h-5" }) {
   );
 }
 
-// آیکون بستن
-export function CloseIcon({ className = "w-5 h-5" }) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M6 18L18 6M6 6l12 12"
-      />
-    </svg>
-  );
-}
-
-// آیکون اطلاعات
-export function InfoIcon({ className = "w-5 h-5" }) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </svg>
-  );
-}
-
-// آیکون نمودار/گراف (برای قیمت لحظه‌ای)
 export function ChartIcon({ className = "w-5 h-5" }) {
   return (
     <svg
@@ -227,35 +132,3 @@ export function ChartIcon({ className = "w-5 h-5" }) {
     </svg>
   );
 }
-
-// آیکون ساعت (برای لحظه‌ای)
-export function ClockIcon({ className = "w-5 h-5" }) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </svg>
-  );
-}
-
-// کامپوننت آیکون محصول بر اساس نوع
-export function ProductIcon({ productId, className = "w-5 h-5" }) {
-  if (productId?.includes("sekke") || productId?.includes("Sekeh")) {
-    return <CoinIcon className={className} />;
-  }
-  if (productId === "usd" || productId === "derham" || productId === "euro") {
-    return <CurrencyIcon className={className} />;
-  }
-  return <GoldIcon className={className} />;
-}
-

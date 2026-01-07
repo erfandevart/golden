@@ -1,6 +1,3 @@
-/**
- * لیست محصولات و مپینگ آن‌ها با داده‌های API
- */
 export const PRODUCT_MAP = [
   { id: "YekGram18", label: "طلای ۱۸ عیار", kind: "gold", karat: 18 },
   { id: "YekGram20", label: "طلای ۲۰ عیار", kind: "gold", karat: 20 },
@@ -16,9 +13,6 @@ export const PRODUCT_MAP = [
   { id: "euro", label: "یورو", kind: "currency", karat: null },
 ];
 
-/**
- * مپینگ ID محصولات به کلیدهای API
- */
 export const PRODUCT_API_MAP = {
   YekGram18: "YekGram18",
   YekGram20: "YekGram20",
@@ -34,9 +28,6 @@ export const PRODUCT_API_MAP = {
   euro: "Euro",
 };
 
-/**
- * لیست ID محصولاتی که قیمت آن‌ها باید در 1000 ضرب شود
- */
 export const PRODUCTS_WITH_THOUSAND_MULTIPLIER = [
   "sekke_emami",
   "SekehRob",

@@ -25,10 +25,8 @@ function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full">
-      {/* Glassmorphism Header */}
       <div className="relative px-4 py-3 bg-white/10 backdrop-blur-md border-b border-white/20 shadow-lg">
         <div className="flex items-center justify-between gap-4">
-          {/* Right side - Title and Time */}
           <div className="flex items-center gap-3 flex-1">
             <ChartIcon className="w-6 h-6 text-yellow-400 flex-shrink-0" />
             <div className="flex flex-col">
@@ -45,10 +43,9 @@ function Header() {
             </div>
           </div>
 
-          {/* Left side - Logo */}
           <div className="relative -mt-2">
             <Image
-              src="/images/logo.png"
+              src="/images/logo.webp"
               alt="لوگو"
               width={80}
               height={80}
@@ -58,7 +55,6 @@ function Header() {
           </div>
         </div>
 
-        {/* Decorative gradient line */}
         <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-yellow-500/50 to-transparent"></div>
       </div>
     </header>

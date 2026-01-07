@@ -15,10 +15,8 @@ import {
 } from "./components/icons/Icons";
 import { getProductIconType } from "./utils/iconHelper";
 import { SkeletonGrid } from "./components/ui/Skeleton";
-import { PageLoader } from "./components/ui/Loader";
 
-// Constants
-const POLL_INTERVAL = 30000; // 30 seconds
+const POLL_INTERVAL = 30000;
 
 export default function Page() {
   const [rates, setRates] = useState({});
@@ -60,7 +58,6 @@ export default function Page() {
     );
   }
 
-  // تبدیل لیست محصولات به آیتم‌های قابل نمایش با قیمت
   const newItems = PRODUCT_MAP.map((p) => {
     const price = getProductPrice(p.id, rates);
     return price !== null ? { id: p.id, label: p.label, price } : null;
@@ -68,7 +65,6 @@ export default function Page() {
 
   return (
     <div className="min-h-screen text-yellow-500 p-4 space-y-3 overflow-x-clip">
-      {/* کارت‌ها */}
 
       <div className="space-y-2">
         {newItems.map((p) => {
@@ -87,7 +83,6 @@ export default function Page() {
               >
                 <div className="flex justify-between items-center gap-3">
                   <div className="flex items-center gap-3">
-                    {/* Icon based on product type */}
                     <div className="w-12 h-12 rounded-lg bg-white/10 border border-white/20 flex-shrink-0 flex items-center justify-center">
                       {p.id === "euro" ? (
                         <EuroIcon className="w-6 h-6 text-yellow-400" />

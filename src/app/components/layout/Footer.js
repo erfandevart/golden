@@ -5,7 +5,6 @@ import React from "react";
 function Footer() {
   return (
     <footer className="relative mt-auto w-full">
-      {/* Glassmorphism Footer */}
       <a
         href="https://instagram.com/erfandevart"
         target="_blank"
@@ -20,17 +19,13 @@ function Footer() {
           cursor-pointer
           overflow-hidden"
       >
-        {/* Top shadow for depth effect */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-black/50 to-transparent"></div>
         
-        {/* Inner glow at bottom */}
         <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-yellow-500/30 to-transparent"></div>
         
-        {/* Subtle inner highlight */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-yellow-500/5 pointer-events-none"></div>
         
         <div className="flex flex-col items-center justify-center">
-          {/* Main text */}
           <div className="flex items-center gap-2">
             <span className="text-xs font-YekanBakhSemiBold text-white/70">
               توسعه داده شده توسط
