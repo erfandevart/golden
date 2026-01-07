@@ -1,3 +1,140 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  direction: rtl;
+  background-color: #05112e;
+  font-family: Arial, Helvetica, sans-serif;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar - متناسب با طراحی سایت */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(5, 17, 46, 0.5);
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(234, 179, 8, 0.6) 0%,
+    rgba(234, 179, 8, 0.4) 100%
+  );
+  border-radius: 20px;
+  border: 1px solid rgba(5, 17, 46, 0.5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(234, 179, 8, 0.8) 0%,
+    rgba(234, 179, 8, 0.6) 100%
+  );
+  border-radius: 20px;
+}
+
+/* Firefox Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(234, 179, 8, 0.6) rgba(5, 17, 46, 0.5);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/images/pattern.png");
+  background-repeat: repeat;
+  background-size: 400px 400px;
+  background-position: center center;
+  opacity: 0.4;
+  z-index: 0;
+  pointer-events: none;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 17, 46, 0.5) 0%,
+    rgba(5, 17, 46, 0.3) 50%,
+    rgba(5, 17, 46, 0.5) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+@layer base {
+  /* #root {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    box-sizing: border-box;
+  } */
+
+  @font-face {
+    font-family: "YekanBakh Thin";
+    src: url("/fonts/YekanBakhFaNumThin.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "YekanBakh Light";
+    src: url("/fonts/YekanBakhFaNumLight.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "YekanBakh Regular";
+    src: url("/fonts/YekanBakhFaNumRegular.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "YekanBakh SemiBold";
+    src: url("/fonts/YekanBakhFaNumSemiBold.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "YekanBakh Bold";
+    src: url("/fonts/YekanBakhFaNumBold.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "YekanBakh ExtraBold";
+    src: url("/fonts/YekanBakhFaNumExtraBold.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "YekanBakh Black";
+    src: url("/fonts/YekanBakhFaNumBlack.woff2") format("woff2");
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "YekanBakh ExtraBlack";
+    src: url("/fonts/YekanBakhFaNumExtraBlack.woff2") format("woff2");
+    font-display: swap;
+  }
+}
+
+/* Background Pattern - Standard UI/UX Implementation */
+/* پس‌زمینه pattern.png در body اعمال شده است */
